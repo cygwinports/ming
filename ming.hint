@@ -1,5 +1,5 @@
 category: Video
-requires: cygwin libming0
+requires: cygwin libgcc1 libgif4 libming0 libpng12 zlib0
 sdesc: "SWF output library (executables)"
 ldesc: "Ming is a C library for generating SWF ('Flash') format movies, 
 plus a set of wrappers for using the library from C++ and popular 

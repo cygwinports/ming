@@ -1,0 +1,50 @@
+inherit perl python tcl
+
+DESCRIPTION="Flash (SWF) output library"
+HOMEPAGE="http://ming.sourceforge.net/"
+SRC_URI="mirror://sourceforge/ming/${P}.tar.bz2"
+PATCH_URI="0.4.2-perl.patch
+           0.4.2-python.patch
+           0.4.2-tcl.patch"
+
+PKG_NAMES="${PN} lib${PN}1 lib${PN}-devel perl-SWF python-${PN} tcl-${PN}"
+ming_CONTENTS="usr/bin/*.exe usr/share/doc/ usr/share/man/man1/"
+libming1_CONTENTS="usr/bin/cygming-1.dll"
+libming_devel_CONTENTS="--exclude=*.3pm.* usr/bin/ming-config usr/include/
+                        usr/lib/lib* usr/lib/pkgconfig/ usr/share/man/man3/"
+perl_SWF_CONTENTS="${PERL_VENDORLIB#/} usr/share/man/man3/*.3pm*"
+python_ming_CONTENTS="${PYTHON_SITELIB#/}"
+tcl_ming_CONTENTS="${TCL_LIBDIR#/}"
+
+DISTCLEANFILES="macros/libtool.m4"
+DIFF_EXCLUDES="ming_config.h setup.py"
+MAKEOPTS+=" mingc_ladir=${TCL_LIBDIR}/ming"
+
+src_compile() {
+	cd ${S}
+	cygautoreconf
+	lndirs
+
+	cd ${B}
+	# php bindings are packaged with PHP itself
+	CYGCONF_SOURCE=${B}
+	cygconf	--enable-perl --disable-php --enable-python --enable-tcl
+	cygmake
+
+	(cd ${B}/perl_ext/blib/man3/
+	 rename :: . *::*)
+}
+
+src_install() {
+	cd ${B}
+	cyginstall
+
+	perl_postinst
+	python_optimize
+
+	(
+		cd ${D}${TCL_LIBDIR}/ming
+		PATH="${D}/usr/bin:$PATH"
+		echo pkg_mkIndex . mingc.dll | ${TCLSH}
+	)
+}

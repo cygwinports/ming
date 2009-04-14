@@ -1,7 +1,7 @@
-category: Video Perl
-requires: cygwin libming0 perl
+category: Video Tcl
+requires: cygwin libgcc1 libming1 tcl
 external-source: ming
-sdesc: "SWF output library (Perl bindings)"
+sdesc: "SWF output library (Tcl bindings)"
 ldesc: "Ming is a C library for generating SWF ('Flash') format movies, 
 plus a set of wrappers for using the library from C++ and popular 
 scripting languages like PHP, Perl, Python, and Tcl."
