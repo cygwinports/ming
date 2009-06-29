@@ -1,5 +1,5 @@
 category: Video
-requires: cygwin libming1 libfreetype-devel libgif-devel libpng12-devel zlib-devel
+requires: libming1 libfreetype-devel libgif-devel libpng12-devel zlib-devel
 external-source: ming
 sdesc: "SWF output library (runtime)"
 ldesc: "Ming is a C library for generating SWF ('Flash') format movies, 

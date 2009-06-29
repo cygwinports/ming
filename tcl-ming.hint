@@ -1,5 +1,5 @@
 category: Video Tcl
-requires: cygwin libgcc1 libming1 tcl
+requires: libgcc1 libming1 tcl
 external-source: ming
 sdesc: "SWF output library (Tcl bindings)"
 ldesc: "Ming is a C library for generating SWF ('Flash') format movies, 
