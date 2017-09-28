@@ -1,0 +1,11 @@
+--- origsrc/ming-0.4.4/py_ext/Makefile.am	2011-10-26 08:33:18.000000000 +0200
++++ src/ming-0.4.4/py_ext/Makefile.am	2011-11-05 15:33:25.046875000 +0100
+@@ -18,7 +18,7 @@ clean-local:
+ 	rm -Rf test.swf build
+ 
+ install:
+-	$(PYTHON) setup.py install --prefix $(prefix) --root "/$(DESTDIR)"
++	$(PYTHON) setup.py install --prefix $(prefix) --root "$(DESTDIR)"
+ 
+ test.swf:
+ 	$(PYTHON) shape.py

@@ -1,0 +1,128 @@
+inherit python perl tcl php
+
+NAME="ming"
+VERSION=0.4.7
+ver=`echo "$VERSION" | tr '.' '_'`
+RELEASE=2
+CATEGORY="Libs"
+SUMMARY="A library for generating Macromedia Flash files"
+DESCRIPTION="Ming is a library for generating Macromedia Flash files (.swf), written in C, and includes useful 
+utilities for working with .swf files.
+It has wrappers that allow it to be used in C++, PHP, Python, Ruby, and Perl."
+
+HOMEPAGE="http://www.libming.org"
+SRC_URI="https://github.com/libming/libming/archive/ming-${ver}.tar.gz"
+SRC_DIR=libming-ming-${ver}
+PATCH_URI="
+  ming-python.patch
+  ming-perl.patch
+  ming-tcl.patch
+  ming-php.patch
+  ming-perl-Makefile.PL.patch
+"
+if [ "$ARCH_x86_64" == "1" ]
+then
+  PATCH_URI="$PATCH_URI ming-pic.patch"
+fi
+
+# Build dependencies only
+DEPEND="perl python swig tcl php libgif-devel"
+
+
+PKG_NAMES="ming libming1 libming-devel python-ming perl-ming tcl-ming php-ming"
+ming_SUMMARY="${SUMMARY} (utilities)"
+ming_CONTENTS="
+  usr/bin/*.exe
+  usr/share/doc/
+  usr/share/man/man1/
+"
+libming1_SUMMARY="${SUMMARY} (runtime)"
+libming1_CONTENTS="
+  usr/bin/cygming-1.dll
+"
+libming_devel_CATEGORY="Devel ${CATEGORY}"
+libming_devel_SUMMARY="${SUMMARY} (development)"
+libming_devel_REQUIRES="libbz2-devel libfreetype-devel libgif-devel libICE-devel libpng-devel libSM-devel libuuid-devel libX11-devel libXau-devel libxcb-devel libXdmcp-devel zlib-devel coreutils"
+libming_devel_CONTENTS="
+  --exclude=ming
+  --exclude=usr/lib/perl*
+  --exclude=usr/lib/tcl*
+  --exclude=usr/lib/python*
+  --exclude=php
+  --exclude=usr/share/man/man3/*3pm*
+  usr/bin/ming-config
+  usr/include/
+  usr/lib/
+  usr/share/man/man3/
+"
+python_ming_CATEGORY="Python ${CATEGORY}"
+python_ming_SUMMARY="${SUMMARY} (Python bindings)"
+python_ming_CONTENTS="
+  ${PYTHON_LIB#/}
+"
+perl_ming_CATEGORY="Perl ${CATEGORY}"
+perl_ming_SUMMARY="${SUMMARY} (Perl bindings)"
+perl_ming_CONTENTS="
+  ${PERL_VENDORLIB#/}
+  usr/share/man/man3/*3pm*
+"
+tcl_ming_CATEGORY="Tcl ${CATEGORY}"
+tcl_ming_SUMMARY="${SUMMARY} (Tcl bindings)"
+tcl_ming_CONTENTS="
+  ${TCL_LIBDIR#/}
+"
+php_ming_CATEGORY="PHP ${CATEGORY}"
+php_ming_SUMMARY="${SUMMARY} (PHP bindings)"
+php_ming_CONTENTS="
+  ${PHP_EXTENSION_DIR#/}
+"
+
+
+DIFF_EXCLUDES="ming_config.h setup.py Makefile"
+
+KEEP_LA_FILES=none
+
+CYGCONF_ARGS="
+	--enable-python
+	--enable-perl
+	--enable-tcl
+	--enable-php
+"
+
+MAKEOPTS="-j1"
+
+src_compile() {
+	cd ${S}
+	cygautoreconf
+	lndirs
+	cd ${B}
+	cygconf
+	cygmake
+}
+
+src_test() {
+        export PERL5LIB=${D}${PERL_VENDORARCH}
+	cd ${B}
+	cygtest
+}
+
+src_install() {
+	cd ${B}
+	cyginstall
+	cd ${B}/docs/man
+	cyginstall
+	
+	rm -rf ${D}${PERL_LIB}
+	sed -e "s#/misc/src/release/${P}-${PR}/inst##g" -i ${D}${PERL_VENDORARCH}/auto/SWF/.packlist
+
+	if inherited tcl
+	then
+		# relocate and install Tcl module
+		dodir ${TCL_LIBDIR}/ming
+		mv ${D}/usr/lib/ming/tcl/mingc.dll ${D}${TCL_LIBDIR}/ming/
+		pushd ${D}${TCL_LIBDIR}/ming
+		echo pkg_mkIndex ${D}${TCL_LIBDIR}/ming mingc.dll | PATH=${D}/usr/bin:$PATH ${TCLSH}
+		popd
+	fi
+	rm -rf ${D}/usr/lib/ming
+}

@@ -1,7 +1,0 @@
-category: Video
-requires: libfreetype6 libgcc1 libgif4 libpng12 zlib0
-external-source: ming
-sdesc: "SWF output library (runtime)"
-ldesc: "Ming is a C library for generating SWF ('Flash') format movies, 
-plus a set of wrappers for using the library from C++ and popular 
-scripting languages like PHP, Perl, Python, and Tcl."

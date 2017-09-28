@@ -1,0 +1,22 @@
+--- origsrc/ming-0.4.5/perl_ext/Makefile.am	2010-10-10 09:19:23.000000000 +0200
++++ src/ming-0.4.5/perl_ext/Makefile.am	2013-09-03 09:47:45.528703200 +0200
+@@ -38,7 +38,7 @@ install: Makefile.perl
+ 	$(MAKE) -f Makefile.perl install PREFIX=$(prefix)
+ 
+ Makefile.perl: Makefile.PL
+-	srcdir=$(srcdir) builddir=$(abs_builddir) $(PERL) $< PREFIX=$(prefix) FIRST_MAKEFILE=Makefile.perl
++	srcdir=$(srcdir) builddir=$(abs_builddir) $(PERL) $< PREFIX=$(prefix) FIRST_MAKEFILE=Makefile.perl INSTALLDIRS=vendor
+ 
+ clean-local: Makefile.perl
+ 	$(MAKE) -f Makefile.perl realclean
+--- origsrc/ming-0.4.5/perl_ext/Makefile.PL	2013-06-08 16:56:17.000000000 +0200
++++ src/ming-0.4.5/perl_ext/Makefile.PL	2013-09-03 10:09:15.698496700 +0200
+@@ -250,7 +250,7 @@ sub get_mingconfig{
+ 	 while(<FH>){
+       next unless /^#define/;
+ 			if (/USE_ZLIB/ and /1$/) { $lib.=" -lz"};
+-			if (/USE_GIF/ and /1$/) {$lib.=" -lungif"};
++			if (/USE_GIF/ and /1$/) {$lib.=" -lgif"};
+ 			if (/USE_PNG/ and /1$/) {$lib.=" -lpng"};
+ 			if (/USE_FREETYPE/ and /1$/) {$lib.=" -lfreetype"};
+ 	 }

@@ -1,0 +1,51 @@
+--- origsrc/ming-0.4.4/configure.in	2011-10-26 09:29:42.000000000 +0200
++++ src/ming-0.4.4/configure.in	2011-11-05 15:33:25.046875000 +0100
+@@ -160,9 +160,10 @@
+ /usr/lib"
+ 
+ 	for i in $tcllibdirs_default; do
+-	  for suf in 8.3 8.4 ""; do
+-	    if test -f $i/libtcl$suf.so || test -f $i/libtcl$suf.a; then
++	  for suf in 8.3 8.4 8.5 ""; do
++	    if test -f $i/libtcl$suf.so || test -f $i/libtcl$suf.a || test -f $i/libtcl$suf.dll.a; then
+ 	     TCL_LIB_DIR=$i
++	     TCL_LIB_SPEC="-L$i -ltcl$suf"
+ 	     break
+ 	    fi
+ 	  done
+@@ -176,7 +177,7 @@
+ /usr/include/tcl-private/generic \
+ /usr/include/tk-private/generic \
+ /usr/include/itcl-private/generic \
+-/usr/include/tcl8.4 \
++/usr/include/tcl8.5 \
+ /usr/include/tcl8.4/tcl-private/generic \
+ /usr/include/tcl8.4/tk-private/generic \
+ /usr/include/tcl8.4/itcl-private/generic \
+@@ -210,6 +211,7 @@ fi
+ 
+ AM_CONDITIONAL(BUILD_TCL_EXTENSION, test x"$tcl_ext" = xyes)
+ AC_SUBST(TCL_LIB_DIR)
++AC_SUBST(TCL_LIB_SPEC)
+ AC_SUBST(TCL_INC_DIR)
+ 
+ dnl --------------------------------------------
+--- origsrc/ming-0.4.4/tcl_ext/Makefile.am	2011-10-26 08:33:18.000000000 +0200
++++ src/ming-0.4.4/tcl_ext/Makefile.am	2011-11-05 15:33:25.046875000 +0100
+@@ -8,7 +8,7 @@ mingc_ladir  = $(libdir)/ming/tcl
+ nodist_mingc_la_SOURCES  = $(BUILT_SOURCES)
+ mingc_la_CPPFLAGS  = -I.. -I../src -I$(TCL_INC_DIR)
+ mingc_la_LDFLAGS  = -module -no-undefined -avoid-version
+-mingc_la_LIBADD  = ../src/libming.la
++mingc_la_LIBADD  = ../src/libming.la $(TCL_LIB_SPEC)
+ 
+ MAINTAINERCLEANFILES = ming_wrap.c
+ 
+--- origsrc/ming-0.4.4/tcl_ext/test.tcl	2011-10-26 08:33:18.000000000 +0200
++++ src/ming-0.4.4/tcl_ext/test.tcl	2011-11-05 15:33:25.046875000 +0100
+@@ -1,4 +1,4 @@
+-load ./.libs/mingc.so mingc
++load ./.libs/mingc.dll mingc
+ set shape [ newSWFShape ]
+ SWFShape_setLine $shape 4 100 0 0 255
+ SWFShape_setRightFill $shape [ SWFShape_addSolidFill $shape 255 0 0 255 ]

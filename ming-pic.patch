@@ -1,0 +1,12 @@
+--- origsrc/ming-0.4.5/configure.in	2013-09-03 10:58:31.246544400 +0200
++++ src/ming-0.4.5/configure.in	2013-09-03 10:59:04.178428000 +0200
+@@ -358,7 +358,7 @@ fi
+ MACHINE=`uname -m`
+ case "$MACHINE" in
+ "x86_64")
+-	CFLAGS="$CFLAGS -Wall -fPIC"
++	CFLAGS="$CFLAGS -Wall"
+ 	;;
+ "alpha")
+ 	CFLAGS="$CFLAGS -Wall -fPIC"
+

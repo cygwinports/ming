@@ -1,0 +1,18 @@
+--- origsrc/ming-0.4.5/php_ext/Makefile.am	2010-10-10 09:19:23.000000000 +0200
++++ src/ming-0.4.5/php_ext/Makefile.am	2015-02-11 12:26:14.438528800 +0100
+@@ -26,8 +26,7 @@ EXTRA_DIST = ming.c php_ming.h README.PH
+ pkglib_LTLIBRARIES = ming.la
+ ming_la_SOURCES = ming.c php_ming.h
+ ming_la_LIBADD =  $(top_builddir)/src/libming.la 
+-# TODO: check if -no-undefined should be added
+-ming_la_LDFLAGS = -module -avoid-version
++ming_la_LDFLAGS = -module -avoid-version -no-undefined `php-config --libs`
+ # TODO: drop conditionals from ming.c and let it bound to current code
+ ming_la_CFLAGS = `php-config --includes` \
+ 	-DCOMPILE_DL_MING \
+@@ -40,4 +39,4 @@ ming_la_CFLAGS = `php-config --includes`
+ 
+ install: all
+ 	$(INSTALL) -d "$(DESTDIR)"/`php-config --extension-dir`
+-	$(INSTALL) -m 755 .libs/ming.so "$(DESTDIR)"/`php-config --extension-dir`
++	$(INSTALL) -m 755 .libs/ming.dll "$(DESTDIR)"/`php-config --extension-dir`
