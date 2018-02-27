@@ -2,7 +2,7 @@ inherit perl php python2 tcl
 
 NAME="ming"
 VERSION=0.4.8
-RELEASE=1
+RELEASE=2
 CATEGORY="Libs"
 SUMMARY="A library for generating Macromedia Flash files"
 DESCRIPTION="Ming is a library for generating Macromedia Flash files (.swf), written in C, and includes useful 
